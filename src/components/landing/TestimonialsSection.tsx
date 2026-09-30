@@ -1,16 +1,43 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Star, MessageSquareQuote } from "lucide-react";
 import { Testimonial } from "@/types";
+import { getActiveTestimonials } from "@/services/testimonials";
 
 interface TestimonialsSectionProps {
   testimonials: Testimonial[];
 }
 
 export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
-  testimonials,
+  testimonials: initialTestimonials,
 }) => {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadFresh = async () => {
+      try {
+        const fresh = await getActiveTestimonials();
+        if (isMounted && fresh) setTestimonials(fresh);
+      } catch (err) {
+        console.warn("Testimonials client refresh error:", err);
+      }
+    };
+    loadFresh();
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        loadFresh();
+      }
+    };
+    window.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      isMounted = false;
+      window.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
   const activeTestimonials = testimonials.filter((t) => t.isActive);
 
   if (activeTestimonials.length === 0) return null;

@@ -15,7 +15,7 @@ import {
   updatePromo,
   deletePromo,
 } from "@/services/promos";
-import { uploadImage } from "@/services/storage";
+import { uploadImage, convertGoogleDriveUrl } from "@/services/storage";
 import { Promo } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -298,9 +298,9 @@ export default function AdminPromosPage() {
                 />
               </label>
               <Input
-                placeholder="Atau tautan URL..."
+                placeholder="Atau tautan URL / Google Drive..."
                 value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
+                onChange={(e) => setImageUrl(convertGoogleDriveUrl(e.target.value))}
                 className="flex-1"
               />
             </div>

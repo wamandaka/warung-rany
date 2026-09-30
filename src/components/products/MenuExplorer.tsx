@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Search, X } from "lucide-react";
 import { Product, Category } from "@/types";
 import { ProductGrid } from "./ProductGrid";
+import { getProducts } from "@/services/products";
+import { getActiveCategories } from "@/services/categories";
 
 interface MenuExplorerProps {
   initialProducts: Product[];
@@ -12,14 +14,47 @@ interface MenuExplorerProps {
 
 export const MenuExplorer: React.FC<MenuExplorerProps> = ({
   initialProducts,
-  categories,
+  categories: initialCategories,
 }) => {
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [onlyAvailable, setOnlyAvailable] = useState<boolean>(false);
 
+  useEffect(() => {
+    let isMounted = true;
+    const loadFreshData = async () => {
+      try {
+        const [freshProducts, freshCategories] = await Promise.all([
+          getProducts(),
+          getActiveCategories(),
+        ]);
+        if (isMounted) {
+          if (freshProducts && freshProducts.length > 0) setProducts(freshProducts);
+          if (freshCategories && freshCategories.length > 0) setCategories(freshCategories);
+        }
+      } catch (err) {
+        console.warn("MenuExplorer client refresh error:", err);
+      }
+    };
+
+    loadFreshData();
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        loadFreshData();
+      }
+    };
+    window.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      isMounted = false;
+      window.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
   const filteredProducts = useMemo(() => {
-    return initialProducts.filter((product) => {
+    return products.filter((product) => {
       // 1. Category filter
       if (selectedCategory !== "all" && product.categoryId !== selectedCategory) {
         return false;
@@ -42,7 +77,7 @@ export const MenuExplorer: React.FC<MenuExplorerProps> = ({
 
       return true;
     });
-  }, [initialProducts, selectedCategory, onlyAvailable, searchQuery]);
+  }, [products, selectedCategory, onlyAvailable, searchQuery]);
 
   return (
     <div className="space-y-8">

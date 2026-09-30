@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -19,6 +19,7 @@ import { useBusiness } from "@/context/BusinessContext";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { toast } from "@/components/ui/Toast";
+import { getProductById } from "@/services/products";
 
 interface ProductDetailViewProps {
   product: Product;
@@ -26,13 +27,32 @@ interface ProductDetailViewProps {
 }
 
 export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
-  product,
+  product: initialProduct,
   category,
 }) => {
+  const [product, setProduct] = useState<Product>(initialProduct);
   const { addToCart, items, openCart } = useCart();
   const { settings } = useBusiness();
   const [quantity, setQuantity] = useState<number>(1);
   const [isAdded, setIsAdded] = useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadFresh = async () => {
+      try {
+        const fresh = await getProductById(initialProduct.id);
+        if (isMounted && fresh) {
+          setProduct(fresh);
+        }
+      } catch (err) {
+        console.warn("ProductDetailView refresh error:", err);
+      }
+    };
+    loadFresh();
+    return () => {
+      isMounted = false;
+    };
+  }, [initialProduct.id]);
 
   const isOutOfStock = !product.isAvailable || product.stock === 0;
 
@@ -179,7 +199,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   <>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold text-stone-700">
-                        Jumlah Porsi
+                       Qty
                       </span>
                       <div className="flex items-center gap-3 bg-stone-100 border border-stone-200 rounded-xl p-1 shadow-2xs">
                         <button
@@ -219,7 +239,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                         ) : (
                           <>
                             <ShoppingBag className="w-5 h-5 mr-2" />
-                            <span>+ Keranjang ({quantity})</span>
+                            <span>Keranjang ({quantity})</span>
                           </>
                         )}
                       </Button>

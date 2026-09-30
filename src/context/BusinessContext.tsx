@@ -40,12 +40,20 @@ export const BusinessProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       fetchConfig();
     };
 
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        fetchConfig();
+      }
+    };
+
     window.addEventListener("storage_sync", handleSync);
     window.addEventListener("storage", handleSync);
+    window.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       window.removeEventListener("storage_sync", handleSync);
       window.removeEventListener("storage", handleSync);
+      window.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [fetchConfig]);
 

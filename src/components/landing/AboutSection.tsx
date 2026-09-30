@@ -8,6 +8,22 @@ import { useBusiness } from "@/context/BusinessContext";
 export const AboutSection: React.FC = () => {
   const { settings } = useBusiness();
 
+  const title =
+    settings.aboutTitle ||
+    "Menghadirkan Kehangatan Masakan Rumah di Setiap Suapan";
+  const story1 =
+    settings.aboutStory ||
+    `${settings.businessName || "Warung Rany"} berawal dari kecintaan memasak hidangan khas nusantara yang sering dinikmati bersama keluarga tercinta. Kami percaya bahwa masakan yang lezat bermula dari bahan yang segar, diolah dengan cinta, dan bumbu rempah pilihan yang melimpah.`;
+  const story2 =
+    settings.aboutStory2 ||
+    "Setiap menu kami masak di pagi hari untuk memastikan kesegaran saat sampai di meja makan Anda. Tanpa pengawet dan selalu mengutamakan kebersihan serta kehalalan produk.";
+  const imageUrl =
+    settings.aboutImageUrl ||
+    "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80";
+  const badgeTitle = settings.aboutBadgeTitle || "Resep Asli Keluarga";
+  const badgeSubtitle =
+    settings.aboutBadgeSubtitle || "Bumbu rempah alami tanpa pengawet";
+
   return (
     <section id="tentang" className="py-16 sm:py-20 lg:py-28 bg-stone-50 border-t border-stone-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,8 +32,8 @@ export const AboutSection: React.FC = () => {
           <div className="relative">
             <div className="relative aspect-4/3 rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-stone-100">
               <Image
-                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80"
-                alt="Dapur Bersih dan Segar"
+                src={imageUrl}
+                alt={badgeTitle}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -30,10 +46,10 @@ export const AboutSection: React.FC = () => {
               </div>
               <div>
                 <span className="block text-sm font-bold text-stone-900">
-                  Resep Asli Keluarga
+                  {badgeTitle}
                 </span>
                 <span className="text-xs text-stone-500">
-                  Bumbu rempah alami tanpa pengawet
+                  {badgeSubtitle}
                 </span>
               </div>
             </div>
@@ -47,16 +63,18 @@ export const AboutSection: React.FC = () => {
             </div>
 
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-stone-900 tracking-tight leading-snug">
-              Menghadirkan Kehangatan Masakan Rumah di Setiap Suapan
+              {title}
             </h2>
 
-            <p className="text-stone-600 text-base leading-relaxed">
-              {settings.businessName || "Warung Rany"} berawal dari kecintaan memasak hidangan khas nusantara yang sering dinikmati bersama keluarga tercinta. Kami percaya bahwa masakan yang lezat bermula dari bahan yang segar, diolah dengan cinta, dan bumbu rempah pilihan yang melimpah.
+            <p className="text-stone-600 text-base leading-relaxed whitespace-pre-line">
+              {story1}
             </p>
 
-            <p className="text-stone-600 text-base leading-relaxed">
-              Setiap menu kami masak di pagi hari untuk memastikan kesegaran saat sampai di meja makan Anda. Tanpa pengawet dan selalu mengutamakan kebersihan serta kehalalan produk.
-            </p>
+            {story2 && (
+              <p className="text-stone-600 text-base leading-relaxed whitespace-pre-line">
+                {story2}
+              </p>
+            )}
 
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-stone-200/60">
               <div className="space-y-1">

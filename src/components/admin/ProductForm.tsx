@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { Product, Category } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
-import { uploadImage } from "@/services/storage";
+import { uploadImage, convertGoogleDriveUrl } from "@/services/storage";
 import { createProduct, updateProduct } from "@/services/products";
 import { toast } from "@/components/ui/Toast";
-import { Upload, X, ArrowLeft, Sparkles, Check } from "lucide-react";
+import { Upload, X, ArrowLeft, Sparkles, Check, Link as LinkIcon } from "lucide-react";
 
 interface ProductFormProps {
   initialData?: Product;
@@ -304,14 +304,21 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-xs font-semibold text-stone-700 uppercase tracking-wider">
-                  Atau Gunakan Tautan URL Foto
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-stone-700 uppercase tracking-wider">
+                    Atau Gunakan Tautan URL Foto
+                  </span>
+                  <span className="text-[11px] text-orange-700 bg-orange-50 font-medium px-2 py-0.5 rounded-md flex items-center gap-1">
+                    <LinkIcon className="w-3 h-3" />
+                    Bisa Google Drive / Web URL
+                  </span>
+                </div>
                 <Input
-                  placeholder="https://images.unsplash.com/..."
+                  placeholder="https://drive.google.com/file/d/... atau https://..."
                   value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
+                  onChange={(e) => setImageUrl(convertGoogleDriveUrl(e.target.value))}
                   error={errors.imageUrl}
+                  helperText="💡 Masukkan URL gambar web atau tautan Google Drive (pastikan izin file Google Drive diatur ke 'Siapa saja yang memiliki link')."
                 />
               </div>
             </div>

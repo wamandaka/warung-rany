@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useBusiness } from "@/context/BusinessContext";
 import {
   UtensilsCrossed,
   LayoutDashboard,
@@ -39,6 +40,8 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const { user, loading, logout, isFirebaseActive } = useAuth();
+  const { settings } = useBusiness();
+  const businessName = settings?.businessName || "Warung Rany";
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   // If on login route, bypass shell
@@ -85,8 +88,8 @@ export default function AdminLayout({
             <UtensilsCrossed className="w-5 h-5" />
           </div>
           <div>
-            <span className="font-bold text-base text-stone-900 block leading-tight">
-              Warung Rany
+            <span className="font-bold text-base text-stone-900 block leading-tight truncate max-w-40">
+              {businessName}
             </span>
             <span className="text-xs text-stone-500">Panel Pengelola</span>
           </div>
@@ -168,8 +171,8 @@ export default function AdminLayout({
           <div className="w-8 h-8 rounded-lg bg-orange-600 text-white flex items-center justify-center">
             <UtensilsCrossed className="w-4 h-4" />
           </div>
-          <span className="font-bold text-sm text-stone-900">
-            Admin Warung Rany
+          <span className="font-bold text-sm text-stone-900 truncate max-w-50">
+            {businessName}
           </span>
         </div>
         <button

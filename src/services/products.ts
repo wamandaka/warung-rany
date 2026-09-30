@@ -13,9 +13,28 @@ import {
 import { db, isFirebaseConfigured } from "@/lib/firebase/config";
 import { localRepo } from "@/lib/firebase/localFallback";
 import { Product } from "@/types";
-import { slugify } from "@/lib/utils";
+import { slugify, serializeTimestamp } from "@/lib/utils";
 
 const PRODUCTS_COLLECTION = "products";
+
+function normalizeProduct(id: string, raw: Record<string, unknown>): Product {
+  return {
+    id,
+    name: String(raw.name ?? ""),
+    slug: String(raw.slug ?? ""),
+    description: String(raw.description ?? ""),
+    price: Number(raw.price ?? 0),
+    categoryId: String(raw.categoryId ?? ""),
+    imageUrl: String(raw.imageUrl ?? ""),
+    stock: raw.stock !== undefined && raw.stock !== null ? Number(raw.stock) : null,
+    isAvailable: raw.isAvailable !== undefined ? Boolean(raw.isAvailable) : true,
+    isTodayMenu: Boolean(raw.isTodayMenu),
+    isFeatured: Boolean(raw.isFeatured),
+    sortOrder: Number(raw.sortOrder ?? 0),
+    createdAt: serializeTimestamp(raw.createdAt),
+    updatedAt: serializeTimestamp(raw.updatedAt),
+  };
+}
 
 export async function getProducts(): Promise<Product[]> {
   if (!isFirebaseConfigured || !db) {
@@ -31,10 +50,9 @@ export async function getProducts(): Promise<Product[]> {
       // If Firestore is empty, return local defaults
       return localRepo.getProducts();
     }
-    return snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...docSnap.data(),
-    })) as Product[];
+    return snapshot.docs.map((docSnap) =>
+      normalizeProduct(docSnap.id, docSnap.data() as Record<string, unknown>)
+    );
   } catch (error) {
     console.warn("Firestore getProducts error, falling back to local:", error);
     return localRepo.getProducts();
@@ -58,7 +76,7 @@ export async function getProductById(id: string): Promise<Product | null> {
       const all = localRepo.getProducts();
       return all.find((p) => p.id === id) || null;
     }
-    return { id: snap.id, ...snap.data() } as Product;
+    return normalizeProduct(snap.id, snap.data() as Record<string, unknown>);
   } catch {
     const all = localRepo.getProducts();
     return all.find((p) => p.id === id) || null;

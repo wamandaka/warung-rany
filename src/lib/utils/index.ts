@@ -93,3 +93,44 @@ export function isStoreCurrentlyOpen(hours?: OpeningHoursData): {
     };
   }
 }
+
+/**
+ * Safely serialize any Firestore timestamp, Date, or object to an ISO string or null
+ * to prevent Next.js RSC "Only plain objects can be passed to Client Components" errors.
+ */
+export function serializeTimestamp(value: unknown): string | null {
+  if (!value) return null;
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return new Date(value).toISOString();
+  if (typeof value === "object" && value !== null) {
+    if ("toDate" in value && typeof (value as { toDate: () => Date }).toDate === "function") {
+      try {
+        return (value as { toDate: () => Date }).toDate().toISOString();
+      } catch {
+        // fallback
+      }
+    }
+    if ("seconds" in value && typeof (value as { seconds: number }).seconds === "number") {
+      return new Date((value as { seconds: number }).seconds * 1000).toISOString();
+    }
+  }
+  return null;
+}
+
+/**
+ * Remove all undefined properties from an object recursively
+ * so Firestore setDoc does not throw "Unsupported field value: undefined"
+ */
+export function removeUndefinedFields<T extends Record<string, any>>(obj: T): T {
+  const cleaned = {} as Record<string, any>;
+  for (const [key, value] of Object.entries(obj)) {
+    if (value !== undefined) {
+      if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+        cleaned[key] = removeUndefinedFields(value);
+      } else {
+        cleaned[key] = value;
+      }
+    }
+  }
+  return cleaned as T;
+}

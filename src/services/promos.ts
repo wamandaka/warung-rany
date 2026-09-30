@@ -9,8 +9,21 @@ import {
 import { db, isFirebaseConfigured } from "@/lib/firebase/config";
 import { localRepo } from "@/lib/firebase/localFallback";
 import { Promo } from "@/types";
+import { serializeTimestamp } from "@/lib/utils";
 
 const PROMOS_COLLECTION = "promos";
+
+function normalizePromo(id: string, raw: Record<string, unknown>): Promo {
+  return {
+    id,
+    title: String(raw.title ?? ""),
+    description: String(raw.description ?? ""),
+    imageUrl: String(raw.imageUrl ?? ""),
+    isActive: raw.isActive !== undefined ? Boolean(raw.isActive) : true,
+    startDate: serializeTimestamp(raw.startDate),
+    endDate: serializeTimestamp(raw.endDate),
+  };
+}
 
 export async function getPromos(): Promise<Promo[]> {
   if (!isFirebaseConfigured || !db) {
@@ -21,10 +34,9 @@ export async function getPromos(): Promise<Promo[]> {
     if (snapshot.empty) {
       return localRepo.getPromos();
     }
-    return snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...docSnap.data(),
-    })) as Promo[];
+    return snapshot.docs.map((docSnap) =>
+      normalizePromo(docSnap.id, docSnap.data() as Record<string, unknown>)
+    );
   } catch {
     return localRepo.getPromos();
   }

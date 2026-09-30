@@ -1,17 +1,44 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Tag, ArrowRight } from "lucide-react";
 import { Promo } from "@/types";
 import { Button } from "@/components/ui/Button";
+import { getActivePromos } from "@/services/promos";
 
 interface PromoBannerProps {
   promos: Promo[];
 }
 
-export const PromoBanner: React.FC<PromoBannerProps> = ({ promos }) => {
+export const PromoBanner: React.FC<PromoBannerProps> = ({ promos: initialPromos }) => {
+  const [promos, setPromos] = useState<Promo[]>(initialPromos);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadFresh = async () => {
+      try {
+        const fresh = await getActivePromos();
+        if (isMounted && fresh) setPromos(fresh);
+      } catch (err) {
+        console.warn("PromoBanner client refresh error:", err);
+      }
+    };
+    loadFresh();
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        loadFresh();
+      }
+    };
+    window.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      isMounted = false;
+      window.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
   const activePromos = promos.filter((p) => p.isActive);
 
   if (activePromos.length === 0) return null;

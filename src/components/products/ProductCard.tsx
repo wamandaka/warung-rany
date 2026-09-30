@@ -150,7 +150,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <>
                 <Plus className="w-4 h-4" />
                 <span>
-                  {qtyInCart > 0 ? `Tambah (${qtyInCart})` : "+ Keranjang"}
+                  {qtyInCart > 0 ? `Tambah (${qtyInCart})` : "Keranjang"}
                 </span>
               </>
             )}

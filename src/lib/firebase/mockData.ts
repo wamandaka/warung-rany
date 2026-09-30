@@ -172,6 +172,15 @@ export const initialSettings: BusinessSettings = {
   ctaText: "Lihat Menu Hari Ini",
   defaultGreeting: "Halo Kak, saya mau pesan:",
   defaultOrderNote: "Mohon konfirmasi ketersediaannya ya. Terima kasih 🙏",
+  aboutTitle: "Menghadirkan Kehangatan Masakan Rumah di Setiap Suapan",
+  aboutStory:
+    "Warung Rany berawal dari kecintaan memasak hidangan khas nusantara yang sering dinikmati bersama keluarga tercinta. Kami percaya bahwa masakan yang lezat bermula dari bahan yang segar, diolah dengan cinta, dan bumbu rempah pilihan yang melimpah.",
+  aboutStory2:
+    "Setiap menu kami masak di pagi hari untuk memastikan kesegaran saat sampai di meja makan Anda. Tanpa pengawet dan selalu mengutamakan kebersihan serta kehalalan produk.",
+  aboutImageUrl:
+    "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+  aboutBadgeTitle: "Resep Asli Keluarga",
+  aboutBadgeSubtitle: "Bumbu rempah alami tanpa pengawet",
 };
 
 export const initialOpeningHours: OpeningHoursData = {

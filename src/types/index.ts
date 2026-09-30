@@ -57,6 +57,13 @@ export interface BusinessSettings {
   ctaText: string;
   defaultGreeting: string;
   defaultOrderNote?: string;
+  // Tentang Kami / About Us
+  aboutTitle?: string;
+  aboutStory?: string;
+  aboutStory2?: string;
+  aboutImageUrl?: string;
+  aboutBadgeTitle?: string;
+  aboutBadgeSubtitle?: string;
 }
 
 export type DayOfWeek =

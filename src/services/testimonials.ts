@@ -12,6 +12,16 @@ import { Testimonial } from "@/types";
 
 const TESTIMONIALS_COLLECTION = "testimonials";
 
+function normalizeTestimonial(id: string, raw: Record<string, unknown>): Testimonial {
+  return {
+    id,
+    name: String(raw.name ?? ""),
+    message: String(raw.message ?? ""),
+    rating: Number(raw.rating ?? 5),
+    isActive: raw.isActive !== undefined ? Boolean(raw.isActive) : true,
+  };
+}
+
 export async function getTestimonials(): Promise<Testimonial[]> {
   if (!isFirebaseConfigured || !db) {
     return localRepo.getTestimonials();
@@ -21,10 +31,9 @@ export async function getTestimonials(): Promise<Testimonial[]> {
     if (snapshot.empty) {
       return localRepo.getTestimonials();
     }
-    return snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...docSnap.data(),
-    })) as Testimonial[];
+    return snapshot.docs.map((docSnap) =>
+      normalizeTestimonial(docSnap.id, docSnap.data() as Record<string, unknown>)
+    );
   } catch {
     return localRepo.getTestimonials();
   }

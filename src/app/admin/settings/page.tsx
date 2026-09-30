@@ -10,6 +10,8 @@ import {
   Save,
   Loader2,
   Upload,
+  Heart,
+  ChefHat,
 } from "lucide-react";
 import {
   getBusinessSettings,
@@ -17,7 +19,7 @@ import {
   getOpeningHours,
   updateOpeningHours,
 } from "@/services/settings";
-import { uploadImage } from "@/services/storage";
+import { uploadImage, convertGoogleDriveUrl } from "@/services/storage";
 import { BusinessSettings, OpeningHoursData, DayOfWeek } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -26,7 +28,7 @@ import { useBusiness } from "@/context/BusinessContext";
 
 export default function AdminSettingsPage() {
   const { refreshSettings } = useBusiness();
-  const [activeTab, setActiveTab] = useState<"info" | "hero" | "hours">("info");
+  const [activeTab, setActiveTab] = useState<"info" | "hero" | "about" | "hours">("info");
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -63,6 +65,23 @@ export default function AdminSettingsPage() {
       const url = await uploadImage(file, "hero");
       setSettings({ ...settings, heroImageUrl: url });
       toast.success("Foto hero berhasil diunggah");
+    } catch (err: unknown) {
+      toast.error((err as Error).message || "Gagal mengunggah foto");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleAboutImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file || !settings) return;
+    setIsUploading(true);
+    try {
+      const url = await uploadImage(file, "about");
+      setSettings({ ...settings, aboutImageUrl: url });
+      toast.success("Foto cerita kami berhasil diunggah");
     } catch (err: unknown) {
       toast.error((err as Error).message || "Gagal mengunggah foto");
     } finally {
@@ -114,8 +133,8 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="space-y-6 max-w-4xl pb-16">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Header with Single Sticky Save Action */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20 bg-stone-100/95 backdrop-blur-sm py-3 -my-2">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
             Pengaturan Warung & Layanan
@@ -130,9 +149,9 @@ export default function AdminSettingsPage() {
           variant="primary"
           onClick={handleSaveAll}
           isLoading={isSaving}
-          className="shadow-md"
+          className="shadow-md shrink-0"
         >
-          <Save className="w-4 h-4 mr-1.5" />
+          <Save className="w-4 h-4 mr-2" />
           <span>Simpan Perubahan</span>
         </Button>
       </div>
@@ -163,6 +182,19 @@ export default function AdminSettingsPage() {
         >
           <Sparkles className="w-4 h-4" />
           <span>Tampilan Beranda</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("about")}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+            activeTab === "about"
+              ? "bg-orange-600 text-white shadow-sm"
+              : "text-stone-600 hover:bg-stone-100"
+          }`}
+        >
+          <Heart className="w-4 h-4" />
+          <span>Tentang Kami (Cerita)</span>
         </button>
 
         <button
@@ -342,10 +374,13 @@ export default function AdminSettingsPage() {
                   />
                 </label>
                 <Input
-                  placeholder="Atau tautan URL foto..."
+                  placeholder="Atau tautan URL foto / Google Drive..."
                   value={settings.heroImageUrl}
                   onChange={(e) =>
-                    setSettings({ ...settings, heroImageUrl: e.target.value })
+                    setSettings({
+                      ...settings,
+                      heroImageUrl: convertGoogleDriveUrl(e.target.value),
+                    })
                   }
                   className="flex-1"
                 />
@@ -355,7 +390,112 @@ export default function AdminSettingsPage() {
         </div>
       )}
 
-      {/* Tab 3: Hours */}
+      {/* Tab 3: Tentang Kami / Cerita Kami */}
+      {activeTab === "about" && (
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+          <h2 className="text-lg font-bold text-stone-900 pb-3 border-b border-stone-100 flex items-center gap-2">
+            <Heart className="w-5 h-5 text-orange-600" />
+            <span>Konten Bagian Tentang Kami (Cerita Kami)</span>
+          </h2>
+
+          <div className="space-y-4">
+            <Input
+              label="Judul Utama Cerita Kami *"
+              placeholder="Menghadirkan Kehangatan Masakan Rumah di Setiap Suapan"
+              value={settings.aboutTitle || ""}
+              onChange={(e) =>
+                setSettings({ ...settings, aboutTitle: e.target.value })
+              }
+              helperText="Judul besar pada bagian 'Cerita Kami' di Beranda"
+            />
+
+            <Textarea
+              label="Paragraf Cerita 1 *"
+              placeholder="Ceritakan awal mula usaha, kecintaan memasak hidangan nusantara..."
+              value={settings.aboutStory || ""}
+              onChange={(e) =>
+                setSettings({ ...settings, aboutStory: e.target.value })
+              }
+              rows={4}
+              helperText="Paragraf pembuka tentang filosofi dan rasa masakan"
+            />
+
+            <Textarea
+              label="Paragraf Cerita 2"
+              placeholder="Ceritakan proses pembuatan di pagi hari, higienitas, dan kehalalan..."
+              value={settings.aboutStory2 || ""}
+              onChange={(e) =>
+                setSettings({ ...settings, aboutStory2: e.target.value })
+              }
+              rows={3}
+              helperText="Paragraf kedua untuk penegasan kesegaran dan tanpa bahan pengawet"
+            />
+
+            {/* Foto Cerita / Dapur */}
+            <div className="space-y-2 pt-2 border-t border-stone-100">
+              <label className="block text-sm font-medium text-stone-700">
+                Foto Dokumentasi Dapur / Toko *
+              </label>
+              <div className="relative aspect-4/3 max-w-md rounded-2xl overflow-hidden bg-stone-100 border border-stone-200">
+                {settings.aboutImageUrl && (
+                  <Image
+                    src={settings.aboutImageUrl}
+                    alt="Pratinjau Cerita Kami"
+                    fill
+                    className="object-cover"
+                  />
+                )}
+              </div>
+
+              <div className="flex gap-2 items-center max-w-md pt-1">
+                <label className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-50 cursor-pointer shrink-0">
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{isUploading ? "Mengunggah..." : "Unggah Foto"}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAboutImageUpload}
+                    className="hidden"
+                  />
+                </label>
+                <Input
+                  placeholder="Atau tautan URL / Google Drive..."
+                  value={settings.aboutImageUrl || ""}
+                  onChange={(e) =>
+                    setSettings({
+                      ...settings,
+                      aboutImageUrl: convertGoogleDriveUrl(e.target.value),
+                    })
+                  }
+                  className="flex-1"
+                />
+              </div>
+            </div>
+
+            {/* Badge Kecil */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-stone-100">
+              <Input
+                label="Judul Badge Kecil"
+                placeholder="Resep Asli Keluarga"
+                value={settings.aboutBadgeTitle || ""}
+                onChange={(e) =>
+                  setSettings({ ...settings, aboutBadgeTitle: e.target.value })
+                }
+              />
+              <Input
+                label="Subjudul Badge Kecil"
+                placeholder="Bumbu rempah alami tanpa pengawet"
+                value={settings.aboutBadgeSubtitle || ""}
+                onChange={(e) =>
+                  setSettings({ ...settings, aboutBadgeSubtitle: e.target.value })
+                }
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 4: Hours */}
       {activeTab === "hours" && (
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
           <div>
@@ -445,21 +585,6 @@ export default function AdminSettingsPage() {
           </div>
         </div>
       )}
-
-      {/* Bottom Save Action */}
-      <div className="flex justify-end pt-4">
-        <Button
-          type="button"
-          variant="primary"
-          size="lg"
-          onClick={handleSaveAll}
-          isLoading={isSaving}
-          className="shadow-lg"
-        >
-          <Save className="w-5 h-5 mr-2" />
-          <span>Simpan Semua Pengaturan</span>
-        </Button>
-      </div>
     </div>
   );
 }

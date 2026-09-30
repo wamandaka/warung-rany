@@ -15,6 +15,16 @@ import { slugify } from "@/lib/utils";
 
 const CATEGORIES_COLLECTION = "categories";
 
+function normalizeCategory(id: string, raw: Record<string, unknown>): Category {
+  return {
+    id,
+    name: String(raw.name ?? ""),
+    slug: String(raw.slug ?? ""),
+    sortOrder: Number(raw.sortOrder ?? 0),
+    isActive: raw.isActive !== undefined ? Boolean(raw.isActive) : true,
+  };
+}
+
 export async function getCategories(): Promise<Category[]> {
   if (!isFirebaseConfigured || !db) {
     return localRepo.getCategories();
@@ -28,10 +38,9 @@ export async function getCategories(): Promise<Category[]> {
     if (snapshot.empty) {
       return localRepo.getCategories();
     }
-    return snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...docSnap.data(),
-    })) as Category[];
+    return snapshot.docs.map((docSnap) =>
+      normalizeCategory(docSnap.id, docSnap.data() as Record<string, unknown>)
+    );
   } catch (error) {
     console.warn("Firestore getCategories error, fallback to local:", error);
     return localRepo.getCategories();

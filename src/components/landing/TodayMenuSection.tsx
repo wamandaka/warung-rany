@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { Product, Category } from "@/types";
 import { ProductGrid } from "@/components/products/ProductGrid";
+import { getProducts } from "@/services/products";
+import { getActiveCategories } from "@/services/categories";
 
 interface TodayMenuSectionProps {
   products: Product[];
@@ -12,9 +14,44 @@ interface TodayMenuSectionProps {
 }
 
 export const TodayMenuSection: React.FC<TodayMenuSectionProps> = ({
-  products,
-  categories,
+  products: initialProducts,
+  categories: initialCategories,
 }) => {
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadFreshData = async () => {
+      try {
+        const [freshProducts, freshCategories] = await Promise.all([
+          getProducts(),
+          getActiveCategories(),
+        ]);
+        if (isMounted) {
+          if (freshProducts && freshProducts.length > 0) setProducts(freshProducts);
+          if (freshCategories && freshCategories.length > 0) setCategories(freshCategories);
+        }
+      } catch (err) {
+        console.warn("Client data refresh error:", err);
+      }
+    };
+
+    loadFreshData();
+
+    // Refresh when user switches back to this tab
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        loadFreshData();
+      }
+    };
+    window.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      isMounted = false;
+      window.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
   // Filter products marked as today's menu
   const todayProducts = products.filter((p) => p.isTodayMenu);
 
