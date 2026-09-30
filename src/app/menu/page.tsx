@@ -10,8 +10,6 @@ export const metadata: Metadata = {
     "Jelajahi aneka menu masakan rumahan lezat, lauk pauk, camilan renyah, dan minuman segar buatan Warung Rany. Pesan mudah via WhatsApp.",
 };
 
-export const revalidate = 60;
-
 export default async function MenuPage() {
   const [products, categories] = await Promise.all([
     getProducts(),

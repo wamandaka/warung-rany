@@ -3,7 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { UtensilsCrossed, Lock, Mail, ArrowRight, ShieldCheck } from "lucide-react";
+import {
+  UtensilsCrossed,
+  Lock,
+  Mail,
+  ArrowRight,
+  ShieldCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { toast } from "@/components/ui/Toast";
 
@@ -77,7 +83,8 @@ export default function AdminLoginPage() {
               <span>Mode Demo Lokal Aktif</span>
             </div>
             <p className="leading-relaxed">
-              Firebase credentials belum diatur di .env. Anda dapat menggunakan akun demo instan untuk menguji seluruh fitur dashboard:
+              Firebase credentials belum diatur di .env. Anda dapat menggunakan
+              akun demo instan untuk menguji seluruh fitur dashboard:
             </p>
             <div className="bg-white/80 p-2 rounded-lg font-mono text-[11px] text-stone-700 flex items-center justify-between">
               <span>admin@warungrany.com / admin123</span>

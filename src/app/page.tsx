@@ -9,8 +9,6 @@ import { AboutSection } from "@/components/landing/AboutSection";
 import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
 import { OpeningHoursSection } from "@/components/landing/OpeningHoursSection";
 
-export const revalidate = 60; // ISR revalidation
-
 export default async function HomePage() {
   const [products, categories, promos, testimonials] = await Promise.all([
     getProducts(),

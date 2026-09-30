@@ -1,8 +1,15 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProductBySlug } from "@/services/products";
+import { getProductBySlug, getProducts } from "@/services/products";
 import { getCategories } from "@/services/categories";
 import { ProductDetailView } from "@/components/products/ProductDetailView";
+
+export async function generateStaticParams() {
+  const products = await getProducts();
+  return products.map((p) => ({
+    slug: p.slug,
+  }));
+}
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
