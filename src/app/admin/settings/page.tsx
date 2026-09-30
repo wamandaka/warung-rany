@@ -133,8 +133,8 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="space-y-6 max-w-4xl pb-16">
-      {/* Header with Single Sticky Save Action */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20 bg-stone-100/95 backdrop-blur-sm py-3 -my-2">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
             Pengaturan Warung & Layanan
@@ -149,7 +149,7 @@ export default function AdminSettingsPage() {
           variant="primary"
           onClick={handleSaveAll}
           isLoading={isSaving}
-          className="shadow-md shrink-0"
+          className="shadow-md shrink-0 w-full sm:w-auto"
         >
           <Save className="w-4 h-4 mr-2" />
           <span>Simpan Perubahan</span>
@@ -157,7 +157,7 @@ export default function AdminSettingsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-stone-200 pb-2 overflow-x-auto scrollbar-none -mx-2 px-2 sm:mx-0 sm:px-0">
+      <div className="flex items-center gap-2 border-b border-stone-200 pb-2 overflow-x-auto scrollbar-none">
         <button
           type="button"
           onClick={() => setActiveTab("info")}
