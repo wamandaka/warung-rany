@@ -40,7 +40,7 @@ export const AboutSection: React.FC = () => {
               />
             </div>
             {/* Small floating badge */}
-            <div className="absolute -bottom-6 -right-4 sm:bottom-6 sm:-right-6 bg-white p-4 sm:p-5 rounded-2xl shadow-xl border border-stone-200/80 flex items-center gap-3.5 max-w-xs">
+            <div className="absolute -bottom-5 right-2 sm:bottom-6 sm:-right-6 bg-white p-3.5 sm:p-5 rounded-2xl shadow-xl border border-stone-200/80 flex items-center gap-3 max-w-[calc(100%-1rem)] sm:max-w-xs">
               <div className="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
                 <ChefHat className="w-6 h-6" />
               </div>

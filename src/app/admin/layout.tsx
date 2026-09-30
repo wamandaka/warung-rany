@@ -164,21 +164,21 @@ export default function AdminLayout({
   );
 
   return (
-    <div className="min-h-screen bg-stone-100/70 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-stone-100/70 flex flex-col md:flex-row overflow-x-hidden">
       {/* Mobile Header Bar */}
       <div className="md:hidden bg-white border-b border-stone-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-orange-600 text-white flex items-center justify-center">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-orange-600 text-white flex items-center justify-center shrink-0">
             <UtensilsCrossed className="w-4 h-4" />
           </div>
-          <span className="font-bold text-sm text-stone-900 truncate max-w-50">
+          <span className="font-bold text-sm text-stone-900 truncate">
             {businessName}
           </span>
         </div>
         <button
           onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
           aria-label={mobileDrawerOpen ? "Tutup menu admin" : "Buka menu admin"}
-          className="p-2 rounded-xl text-stone-600 hover:bg-stone-100"
+          className="p-2 rounded-xl text-stone-600 hover:bg-stone-100 shrink-0"
         >
           {mobileDrawerOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -206,7 +206,7 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
         {children}
       </main>
     </div>

@@ -157,56 +157,56 @@ export default function AdminSettingsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-stone-200 pb-2">
+      <div className="flex items-center gap-2 border-b border-stone-200 pb-2 overflow-x-auto scrollbar-none -mx-2 px-2 sm:mx-0 sm:px-0">
         <button
           type="button"
           onClick={() => setActiveTab("info")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0 whitespace-nowrap ${
             activeTab === "info"
               ? "bg-orange-600 text-white shadow-sm"
               : "text-stone-600 hover:bg-stone-100"
           }`}
         >
-          <Store className="w-4 h-4" />
+          <Store className="w-4 h-4 shrink-0" />
           <span>Informasi & WhatsApp</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("hero")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0 whitespace-nowrap ${
             activeTab === "hero"
               ? "bg-orange-600 text-white shadow-sm"
               : "text-stone-600 hover:bg-stone-100"
           }`}
         >
-          <Sparkles className="w-4 h-4" />
+          <Sparkles className="w-4 h-4 shrink-0" />
           <span>Tampilan Beranda</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("about")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0 whitespace-nowrap ${
             activeTab === "about"
               ? "bg-orange-600 text-white shadow-sm"
               : "text-stone-600 hover:bg-stone-100"
           }`}
         >
-          <Heart className="w-4 h-4" />
+          <Heart className="w-4 h-4 shrink-0" />
           <span>Tentang Kami (Cerita)</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("hours")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0 whitespace-nowrap ${
             activeTab === "hours"
               ? "bg-orange-600 text-white shadow-sm"
               : "text-stone-600 hover:bg-stone-100"
           }`}
         >
-          <Clock className="w-4 h-4" />
+          <Clock className="w-4 h-4 shrink-0" />
           <span>Jam Operasional</span>
         </button>
       </div>
@@ -362,8 +362,8 @@ export default function AdminSettingsPage() {
                 )}
               </div>
 
-              <div className="flex gap-2 items-center max-w-lg pt-1">
-                <label className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-50 cursor-pointer shrink-0">
+              <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center max-w-lg pt-1">
+                <label className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-50 cursor-pointer shrink-0">
                   <Upload className="w-3.5 h-3.5" />
                   <span>{isUploading ? "Mengunggah..." : "Unggah Foto"}</span>
                   <input
@@ -447,8 +447,8 @@ export default function AdminSettingsPage() {
                 )}
               </div>
 
-              <div className="flex gap-2 items-center max-w-md pt-1">
-                <label className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-50 cursor-pointer shrink-0">
+              <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center max-w-md pt-1">
+                <label className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-50 cursor-pointer shrink-0">
                   <Upload className="w-3.5 h-3.5" />
                   <span>{isUploading ? "Mengunggah..." : "Unggah Foto"}</span>
                   <input

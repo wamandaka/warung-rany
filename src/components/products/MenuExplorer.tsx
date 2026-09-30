@@ -106,10 +106,10 @@ export const MenuExplorer: React.FC<MenuExplorerProps> = ({
         {/* Category Pills & Availability Toggle */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
           {/* Category Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none min-w-0 max-w-full flex-1">
             <button
               onClick={() => setSelectedCategory("all")}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all select-none cursor-pointer ${
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all select-none cursor-pointer shrink-0 ${
                 selectedCategory === "all"
                   ? "bg-orange-600 text-white shadow-sm shadow-orange-600/20"
                   : "bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-900"
@@ -125,7 +125,7 @@ export const MenuExplorer: React.FC<MenuExplorerProps> = ({
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all select-none cursor-pointer ${
+                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all select-none cursor-pointer shrink-0 ${
                     isSelected
                       ? "bg-orange-600 text-white shadow-sm shadow-orange-600/20"
                       : "bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-900"

@@ -64,15 +64,15 @@ export const Navbar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo & Brand Name */}
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-orange-600 text-white flex items-center justify-center shadow-md shadow-orange-600/20 group-hover:scale-105 transition-transform">
+            <Link href="/" className="flex items-center gap-2.5 group min-w-0 mr-2">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-orange-600 text-white flex items-center justify-center shadow-md shadow-orange-600/20 group-hover:scale-105 transition-transform shrink-0">
                 <UtensilsCrossed className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-lg sm:text-xl text-stone-900 tracking-tight leading-tight group-hover:text-orange-600 transition-colors">
+              <div className="flex flex-col min-w-0">
+                <span className="font-bold text-base sm:text-xl text-stone-900 tracking-tight leading-tight group-hover:text-orange-600 transition-colors truncate max-w-35 sm:max-w-xs">
                   {settings.businessName || "Warung Rany"}
                 </span>
-                <span className="text-[11px] text-stone-500 line-clamp-1">
+                <span className="text-[11px] text-stone-500 truncate max-w-35 sm:max-w-xs">
                   {settings.tagline || "Masakan Rumahan, Rasa yang Bikin Pulang"}
                 </span>
               </div>
