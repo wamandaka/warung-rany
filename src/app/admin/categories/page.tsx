@@ -172,7 +172,7 @@ export default function AdminCategoriesPage() {
           </div>
         ) : (
           <div className="overflow-x-auto scrollbar-none">
-            <table className="w-full min-w-[550px] text-left text-sm text-stone-600">
+            <table className="w-full min-w-137.5 text-left text-sm text-stone-600">
               <thead className="bg-stone-50 text-xs uppercase font-bold text-stone-500 border-b border-stone-200">
                 <tr>
                   <th className="py-3.5 px-6">Urutan</th>

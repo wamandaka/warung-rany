@@ -188,7 +188,7 @@ export default function AdminProductsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto scrollbar-none">
-            <table className="w-full min-w-[720px] text-left text-sm text-stone-600">
+            <table className="w-full min-w-180 text-left text-sm text-stone-600">
               <thead className="bg-stone-50 text-xs uppercase font-bold text-stone-500 border-b border-stone-200">
                 <tr>
                   <th className="py-3.5 px-4">Menu</th>
