@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   X,
@@ -43,6 +43,15 @@ export const CartDrawer: React.FC = () => {
   const [nameError, setNameError] = useState<string>("");
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [isValidating, setIsValidating] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isCartOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isCartOpen]);
 
   if (!isCartOpen && totalItems === 0) {
     return null;

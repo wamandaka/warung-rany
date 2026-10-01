@@ -47,7 +47,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-stone-50 text-stone-900 flex flex-col antialiased selection:bg-orange-100 selection:text-orange-900">
         <AppProviders>
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 overflow-x-clip">{children}</main>
           <Footer />
           <CartDrawer />
         </AppProviders>

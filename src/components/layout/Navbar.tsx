@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShoppingBag, Menu, X, UtensilsCrossed, Clock, Shield } from "lucide-react";
+import { ShoppingBag, Menu, X, UtensilsCrossed, Clock } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useBusiness } from "@/context/BusinessContext";
 import { Button } from "@/components/ui/Button";
