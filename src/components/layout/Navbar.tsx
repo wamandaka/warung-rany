@@ -49,13 +49,13 @@ export const Navbar: React.FC = () => {
               <span className="hidden md:inline text-stone-400">
                 Pesan Cepat via WhatsApp
               </span>
-              <Link
+              {/* <Link
                 href="/admin"
                 className="text-stone-400 hover:text-white flex items-center gap-1 text-[11px]"
               >
                 <Shield className="w-3 h-3" />
                 <span>Admin</span>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
